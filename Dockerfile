@@ -1,6 +1,6 @@
 FROM r-base:latest
 
-MAINTAINER Winston Chang "winston@rstudio.com"
+MAINTAINER Torkild U. Resheim "tur@itema.no"
 
 RUN apt-get update && apt-get install -y -t unstable \
     sudo \
@@ -12,9 +12,10 @@ RUN apt-get update && apt-get install -y -t unstable \
     libxt-dev
 
 # Download and install libssl 0.9.8
-RUN wget --no-verbose http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb && \
-    dpkg -i libssl0.9.8_0.9.8o-4squeeze14_amd64.deb && \
-    rm -f libssl0.9.8_0.9.8o-4squeeze14_amd64.deb
+# libssl1.0.2-dbg_1.0.2g-1_amd64.deb (squeeze14)
+RUN wget --no-verbose http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl1.0.2-dbg_1.0.2g-1_amd64.deb && \
+    dpkg -i libssl1.0.2-dbg_1.0.2g-1_amd64.deb && \
+    rm -f libssl1.0.2-dbg_1.0.2g-1_amd64.deb
 
 # Download and install shiny server
 RUN wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION -O "version.txt" && \
@@ -30,5 +31,6 @@ RUN cp -R /usr/local/lib/R/site-library/shiny/examples/* /srv/shiny-server/
 EXPOSE 3838
 
 COPY shiny-server.sh /usr/bin/shiny-server.sh
+COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
 
 CMD ["/usr/bin/shiny-server.sh"]
